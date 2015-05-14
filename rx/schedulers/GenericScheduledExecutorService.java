@@ -1,0 +1,33 @@
+package rx.schedulers;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import rx.internal.schedulers.NewThreadWorker;
+import rx.internal.util.RxThreadFactory;
+
+final class GenericScheduledExecutorService
+{
+  private static final GenericScheduledExecutorService INSTANCE = new GenericScheduledExecutorService();
+  private static final RxThreadFactory THREAD_FACTORY = new RxThreadFactory("RxScheduledExecutorPool-");
+  private static final String THREAD_NAME_PREFIX = "RxScheduledExecutorPool-";
+  private final ScheduledExecutorService executor;
+
+  private GenericScheduledExecutorService()
+  {
+    int i = Runtime.getRuntime().availableProcessors();
+    if (i > 4)
+      i /= 2;
+    if (i > 8)
+      i = 8;
+    ScheduledExecutorService localScheduledExecutorService = Executors.newScheduledThreadPool(i, THREAD_FACTORY);
+    if ((!NewThreadWorker.tryEnableCancelPolicy(localScheduledExecutorService)) && ((localScheduledExecutorService instanceof ScheduledThreadPoolExecutor)))
+      NewThreadWorker.registerExecutor((ScheduledThreadPoolExecutor)localScheduledExecutorService);
+    this.executor = localScheduledExecutorService;
+  }
+
+  public static ScheduledExecutorService getInstance()
+  {
+    return INSTANCE.executor;
+  }
+}

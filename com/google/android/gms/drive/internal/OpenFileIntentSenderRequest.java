@@ -1,0 +1,39 @@
+package com.google.android.gms.drive.internal;
+
+import android.os.Parcel;
+import android.os.Parcelable.Creator;
+import com.google.android.gms.common.internal.safeparcel.SafeParcelable;
+import com.google.android.gms.drive.DriveId;
+
+public class OpenFileIntentSenderRequest
+  implements SafeParcelable
+{
+  public static final Parcelable.Creator<OpenFileIntentSenderRequest> CREATOR = new zzbf();
+  final int zzFG;
+  final DriveId zzSA;
+  final String zzSy;
+  final String[] zzSz;
+
+  OpenFileIntentSenderRequest(int paramInt, String paramString, String[] paramArrayOfString, DriveId paramDriveId)
+  {
+    this.zzFG = paramInt;
+    this.zzSy = paramString;
+    this.zzSz = paramArrayOfString;
+    this.zzSA = paramDriveId;
+  }
+
+  public OpenFileIntentSenderRequest(String paramString, String[] paramArrayOfString, DriveId paramDriveId)
+  {
+    this(1, paramString, paramArrayOfString, paramDriveId);
+  }
+
+  public int describeContents()
+  {
+    return 0;
+  }
+
+  public void writeToParcel(Parcel paramParcel, int paramInt)
+  {
+    zzbf.zza(this, paramParcel, paramInt);
+  }
+}
